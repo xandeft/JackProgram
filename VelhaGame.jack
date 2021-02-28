@@ -1,0 +1,291 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/09/Square/Main.jack
+
+/** Initializes a new Square Dance game and starts running it. */
+
+class VelhaGame {
+	
+	field Velha velha;
+	field Player player1, player2;
+	field Array line1, line2, line3, play;
+	
+	constructor VelhaGame new() {
+		do playerStart();
+		return this;
+	}
+	
+	method void dispose() {
+		do velha.dispose();
+		do Memory.deAlloc(this);
+		return;
+	}
+	
+	method void run() {
+		var boolean exit, gameOver, onceOrTwice, checkGame, checkWin;
+		var int count, i, playerGame, restart;
+		let exit = false;
+		while(~exit) {
+			let velha = Velha.new(player1.getName(), player2.getName(), player1.getPoints(), player2.getPoints());
+			let line1 = Array.new(3);
+			let line2 = Array.new(3);
+			let line3 = Array.new(3);
+			let i = 0;
+			while(i<3){
+				let line1[i] = 0;
+				let line2[i] = 0;
+				let line3[i] = 0;
+				let i = i + 1;
+			}
+			let play = Array.new(2);
+			let gameOver = false;
+			let onceOrTwice = false;
+			let count = 1;
+			while(~gameOver) {
+				if (~onceOrTwice) { //Primeiro player joga!
+					let playerGame = 1;
+					do Output.moveCursor(17, 33);
+					do Output.printString("P1:");
+					do Output.moveCursor(19, 33);
+					let play[0] = Keyboard.readInt("Line: ");
+					do Output.moveCursor(20, 33);
+					let play[1] = Keyboard.readInt("Column: ");
+					let checkGame =  checkPlay(play, playerGame);
+					if (checkGame) {
+						do Output.moveCursor(22, 33);
+						do Output.printString("                ");
+						do velha.drawCircle(play);
+						let checkWin = checkWinner();
+						if (checkWin) {
+							do player1.incPoint();
+							do Output.moveCursor(22, 33);
+							do Output.printString("Player 1 Winner");
+							let count = 9;
+						}
+						else {
+							let count = count + 1;
+							let onceOrTwice = true;
+						}
+					}
+					else {
+						do Output.moveCursor(22, 33);
+						do Output.printString("Jogada Invalida!");
+					}
+					
+				}
+				
+				if (onceOrTwice) { //Segundo player joga!
+					let playerGame = 2;
+					do Output.moveCursor(17, 33);
+					do Output.printString("P2:");
+					do Output.moveCursor(19, 33);
+					let play[0] = Keyboard.readInt("Line: ");
+					do Output.moveCursor(20, 33);
+					let play[1] = Keyboard.readInt("Column: ");
+					let checkGame =  checkPlay(play, playerGame);
+					
+					if (checkGame) {
+						do Output.moveCursor(22, 33);
+						do Output.printString("                ");
+						do velha.drawRectangle(play);
+						let checkWin = checkWinner();
+						if (checkWin) {
+							do player2.incPoint();
+							do Output.moveCursor(22, 33);
+							do Output.printString("Player 2 Winner");
+							let count = 9;
+						}
+						else {
+							let count = count + 1;
+							let onceOrTwice = false;
+						}
+					}
+					else {
+						do Output.moveCursor(22, 33);
+						do Output.printString("Jogada Invalida!");
+					}
+				}
+				if (count = 9) {
+					let gameOver = true;
+					do Sys.wait(2000);
+				}
+			}
+			do Screen.clearScreen();
+			do Output.moveCursor(10, 20);
+            do Output.printString("AGAIN? 1: yes, 2: no");
+            do Output.moveCursor(11, 25);
+            let restart =  Keyboard.readInt("");
+            if (~(restart=1)) {
+                do Output.moveCursor(10, 30);
+                do Screen.clearScreen();
+                do Output.printString("BYE");
+                do Sys.wait(2000);
+                do Screen.clearScreen();
+                do Sys.wait(2000);
+                return;
+            }
+            else {
+            	do Screen.clearScreen();
+            }
+			
+		}
+		
+		
+		return;
+	}
+	
+	method void playerStart() {
+		var String name;
+		var int count;
+		let count = 1;
+		while (count < 3) {
+			if (count = 1){
+				let name = Keyboard.readLine("Digit your name (player1/Circle): ");
+				let player1 = Player.new(name);
+				let count = count + 1;
+			}
+			if (count = 2) {
+				let name = Keyboard.readLine("Digit your name (player2/Rectangle): ");
+				let player2 = Player.new(name);
+				let count = count + 1;
+			}
+		}
+		do Screen.clearScreen();
+		return;
+	}
+	
+	method boolean checkPlay(Array playing, int playerGaming){
+		if (playing[0] = 1){ //line1
+			if (playing[1] = 1){ //line1 column 1
+				if (line1[0] < 1) {
+					let line1[0] = playerGaming;
+					return true;
+				}
+			}
+			if (playing[1] = 2){ //line1 column 2
+				if (line1[1] < 1) {
+					let line1[1] = playerGaming;
+					return true;
+				}
+			}
+			if (playing[1] = 3){ //line1 column 3
+				if (line1[2] < 1) {
+					let line1[2] = playerGaming;
+					return true;
+				}
+			}
+		}
+		if (playing[0] = 2) { //line2
+			if (playing[1] = 1){ //line2 column 1
+				if (line2[0] < 1) {
+					let line2[0] = playerGaming;
+					return true;
+				}
+			}
+			if (playing[1] = 2){ //line2 column 2
+				if (line2[1] < 1) {
+					let line2[1] = playerGaming;
+					return true;
+				}
+			}
+			if (playing[1] = 3){ //line2 column 3
+				if (line2[2] < 1) {
+					let line2[2] = playerGaming;
+					return true;
+				}
+			}
+		}
+		if (playing[0] = 3) { //line3
+			if (playing[1]= 1){ //line1 column 1
+				if (line3[0] < 1) {
+					let line3[0] = playerGaming;
+					return true;
+				}
+			}
+			if (playing[1] = 2){ //line1 column 2
+				if (line3[1] < 1) {
+					let line3[1] = playerGaming;
+					return true;
+				}
+			}
+			if (playing[1]= 3){ //line1 column 3
+				if (line3[2] < 1) {
+					let line3[2] = playerGaming;
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	
+	method boolean checkWinner(){
+		if (line1[0] > 0 & line1[1] > 0 & line1[2] > 0) { //Primeira Linha
+			if (line1[0] = line1[1] & line1[0] = line1[2]){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (line2[0] > 0 & line2[1] > 0 & line2[2] > 0) { //Segunda Linha
+			if (line2[0] = line2[1] & line2[0] = line2[2]){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (line3[0] > 0 & line3[1] > 0 & line3[2] > 0) { //Terceira Linha
+			if (line3[0] = line3[1] & line3[0] = line3[2]){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (line1[0] > 0 & line2[1] > 0 & line3[2] > 0) { //Diagonal a direita
+			if (line1[0] = line2[1] & line1[0] = line3[2]){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (line1[2] > 0 & line2[1] > 0 & line3[0] > 0) { //Diagonal a esquerda
+			if (line1[2] = line2[1] & line1[2] = line3[0]){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (line1[0] > 0 & line2[0] > 0 & line3[0] > 0) { //Linha a esquerda
+			if (line1[0] = line2[0] & line1[0] = line3[0]){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (line1[1] > 0 & line2[1] > 0 & line3[1] > 0) { //Linha do meio
+			if (line1[1] = line2[1] & line1[1] = line3[1]){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (line1[2] > 0 & line2[2] > 0 & line3[2] > 0) { //Linha a direita
+			if (line1[2] = line2[2] & line1[2] = line3[2]){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		return false;
+	}
+	
+}

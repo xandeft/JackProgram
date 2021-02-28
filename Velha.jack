@@ -1,0 +1,196 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/09/Square/Main.jack
+
+class Velha {
+	
+	field int x,y;
+	field String p1Name, p2Name;
+	field int p1Point, p2Point;
+	
+	constructor Velha new(String Ap1Name, String Ap2Name, int Ap1Point, int Ap2Point) {
+		let p1Name = Ap1Name;
+		let p2Name = Ap2Name;
+		let p1Point = Ap1Point;
+		let p2Point = Ap2Point;
+		do Output.moveCursor(0, 47);
+		do Output.printString("Velha Game");
+		do drawBoard();
+		do drawScore(p1Name, p1Point, p2Name, p2Point);
+		return this;
+	}
+	
+	method void dispose() {
+		do Memory.deAlloc(this);
+		return;
+	}
+	
+	method void drawBoard() {
+		do Screen.setColor(true);
+		//Line left
+		do Screen.drawRectangle(110,10,125,25);
+		do Screen.drawRectangle(110,25,125,40);
+		do Screen.drawRectangle(110,40,125,55);
+		do Screen.drawRectangle(110,55,125,70);
+		do Screen.drawRectangle(110,70,125,85);
+		do Screen.drawRectangle(110,85,125,100);
+		do Screen.drawRectangle(110,100,125,115);
+		do Screen.drawRectangle(110,115,125,130);
+		do Screen.drawRectangle(110,130,125,145);
+		do Screen.drawRectangle(110,145,125,160);
+		do Screen.drawRectangle(110,160,125,175);
+		do Screen.drawRectangle(110,175,125,190);
+
+		//Line Right
+		do Screen.drawRectangle(210,10,225,25);
+		do Screen.drawRectangle(210,25,225,40);
+		do Screen.drawRectangle(210,40,225,55);
+		do Screen.drawRectangle(210,55,225,70);
+		do Screen.drawRectangle(210,70,225,85);
+		do Screen.drawRectangle(210,85,225,100);
+		do Screen.drawRectangle(210,100,225,115);
+		do Screen.drawRectangle(210,115,225,130);
+		do Screen.drawRectangle(210,130,225,145);
+		do Screen.drawRectangle(210,145,225,160);
+		do Screen.drawRectangle(210,160,225,175);
+		do Screen.drawRectangle(210,175,225,190);
+		
+		//Line top
+		do Screen.drawRectangle(50,60,70,75);
+		do Screen.drawRectangle(70,60,90,75);
+		do Screen.drawRectangle(90,60,110,75);
+		do Screen.drawRectangle(110,60,130,75);
+		do Screen.drawRectangle(130,60,150,75);
+		do Screen.drawRectangle(150,60,170,75);
+		do Screen.drawRectangle(170,60,190,75);
+		do Screen.drawRectangle(190,60,210,75);
+		do Screen.drawRectangle(210,60,230,75);
+		do Screen.drawRectangle(230,60,250,75);
+		do Screen.drawRectangle(250,60,270,75);
+		do Screen.drawRectangle(270,60,290,75);
+		
+		//Line botom
+		do Screen.drawRectangle(50,130,70,145);
+		do Screen.drawRectangle(70,130,90,145);
+		do Screen.drawRectangle(90,130,110,145);
+		do Screen.drawRectangle(110,130,130,145);
+		do Screen.drawRectangle(130,130,150,145);
+		do Screen.drawRectangle(150,130,170,145);
+		do Screen.drawRectangle(170,130,190,145);
+		do Screen.drawRectangle(190,130,210,145);
+		do Screen.drawRectangle(210,130,230,145);
+		do Screen.drawRectangle(230,130,250,145);
+		do Screen.drawRectangle(250,130,270,145);
+		do Screen.drawRectangle(270,130,290,145);
+		
+		return;
+	}
+	
+	method void drawScore(String p1Name, int p1Point, String p2Name, int p2Point) {
+		do Output.moveCursor(3, 50);
+		do Output.printString("Score");
+		do Output.moveCursor(6, 43);
+		do Output.printString(p1Name);
+		do Output.printString(": ");
+		do Output.printInt(p1Point);
+		
+		do Output.moveCursor(8, 43);
+		do Output.printString(p2Name);
+		do Output.printString(": ");
+		do Output.printInt(p2Point);
+		return;
+	}
+	
+	method void drawCircle(String position){
+		if (position[0] = 1){
+			if (position[1] = 1){
+				do Screen.setColor(true);
+				do Screen.drawCircle(80,40,11); 
+			}
+			if (position[1] = 2){
+				do Screen.setColor(true);
+				do Screen.drawCircle(165,40,11); 
+			}
+			if (position[1] = 3){
+				do Screen.setColor(true);
+				do Screen.drawCircle(255,40,11); 
+			}
+		}
+		if (position[0] = 2){
+			if (position[1] = 1){
+				do Screen.setColor(true);
+				do Screen.drawCircle(80,100,11);  
+			}
+			if (position[1] = 2){
+				do Screen.setColor(true);
+				do Screen.drawCircle(165,100,11); 
+			}
+			if (position[1] = 3){
+				do Screen.setColor(true);
+				do Screen.drawCircle(255,100,11); 
+			}
+		}
+		if (position[0] = 3){
+			if (position[1] = 1){
+				do Screen.setColor(true);
+				do Screen.drawCircle(80,170,11); 
+			}
+			if (position[1] = 2){
+				do Screen.setColor(true);
+				do Screen.drawCircle(165,170,11); 
+			}
+			if (position[1] = 3){
+				do Screen.setColor(true);
+				do Screen.drawCircle(255,170,11); 
+			}
+		}
+		return;
+	}
+	
+	method void drawRectangle(Array position){
+		if (position[0] = 1){
+			if (position[1] = 1){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(70, 30, 90, 50); 
+			}
+			if (position[1] = 2){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(155, 30, 175, 50);
+			}
+			if (position[1] = 3){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(245, 30, 265, 50); 
+			}
+		}
+		if (position[0] = 2){
+			if (position[1] = 1){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(70, 90, 90, 110); 
+			}
+			if (position[1] = 2){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(155, 90, 175, 110);
+			}
+			if (position[1] = 3){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(245, 90, 265, 110); 
+			}
+		}
+		if (position[0] = 3){
+			if (position[1] = 1){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(70, 160, 90, 180); 
+			}
+			if (position[1] = 2){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(155, 160, 175, 180);
+			}
+			if (position[1] = 3){
+				do Screen.setColor(true);
+				do Screen.drawRectangle(245, 160, 265, 180); 
+			}
+		}
+		return;
+	}
+}

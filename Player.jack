@@ -1,0 +1,29 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/09/Square/Main.jack
+
+
+class Player {
+	field String name;
+	field int points;
+	
+	constructor Player new(String Aname) {
+		let name = Aname;
+		let points = 0;
+		return this;
+	}
+	
+	method String getName(){
+		return name;
+	}
+	
+	method int getPoints(){
+		return points;
+	}
+	
+	method void incPoint(){
+		let points = points + 1;
+		return;	
+	}
+}
